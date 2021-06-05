@@ -21,26 +21,38 @@ export default class HelloWorld extends Vue {
 
   drawRect() {
     const canvasWidth = 600;
+    const marginX = 10;
     const canvasHeight = 600;
+    const marginY = 10;
 
-    const aX = 10;
-    const bX = 5;
+    const maxX = 2 * Math.PI;
+    const aX = (canvasWidth - 2 * marginX) / (2 * maxX);
+    const bX = canvasWidth / 2;
+    const convertWidth = function (width: number): number{
+      return width * aX;
+    }
     const convertX = function (x: number): number {
-      return x * aX + bX
+      return convertWidth(x) + bX
     }
 
-    const aY = 10;
-    const bY = 5;
-    const convertY = function (x: number): number {
-      return x * aY + bY
+    const maxY = 1;
+    const aY = (canvasHeight - 2 * marginY) / (2 * maxY);
+    const bY = canvasHeight / 2;
+    const convertHeight = function (height: number): number {
+      return height * aY;
     }
-    console.info(convertY(6))
+    const convertY = function (y: number): number {
+      return -convertHeight(y) + bY
+    }
 
     const ctx = this.vueCanvas;
-
+    const rect = function (x: number, y: number, width: number, height: number): void {
+      ctx.rect(convertX(x), convertY(y), convertWidth(width), convertHeight(height));
+    }
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
     ctx.beginPath();
-    ctx.rect(110, 10, 350, 350);
+    rect(-maxX, maxY, 2 * maxX, 2 * maxY);
     ctx.strokeStyle = '#22695c';
     ctx.lineWidth = 2;
 
