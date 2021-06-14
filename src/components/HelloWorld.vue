@@ -4,6 +4,8 @@
 
     <div id="rectangle" class="mainControls">
       <button v-on:click="drawRect">Function</button>
+      <label for="maxX">Max X (* pi)</label><input v-model="maxX" id="maxX" type="number">
+      <label for="maxY">Max Y</label><input v-model="maxY" id="maxY" type="number">
     </div>
     <canvas id="canvas" width="600" height="600" class="mainCanvas"></canvas>
   </div>
@@ -11,12 +13,15 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 @Component
 export default class HelloWorld extends Vue {
-  @Prop() msg!: string
   vueCanvas!: object
+  msg = 'Chart 3D'
+  maxX = 2
+  maxY = 1
 
   mounted(): void {
     this.vueCanvas = document
@@ -32,7 +37,7 @@ export default class HelloWorld extends Vue {
     const canvasHeight = 600;
     const marginY = 10;
 
-    const maxX = 2 * Math.PI;
+    const maxX = this.maxX * Math.PI;
     const convertWidth = function (width: number): number {
       const aX = (canvasWidth - 2 * marginX) / (2 * maxX);
       return width * aX;
@@ -42,7 +47,7 @@ export default class HelloWorld extends Vue {
       return convertWidth(x) + bX
     }
 
-    const maxY = 1;
+    const maxY = this.maxY;
     const convertHeight = function (height: number): number {
       const aY = (canvasHeight - 2 * marginY) / (2 * maxY);
       return height * aY;
