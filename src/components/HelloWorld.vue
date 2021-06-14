@@ -6,6 +6,7 @@
       <button v-on:click="drawRect">Function</button>
       <label for="maxX">Max X (* pi)</label><input v-model="maxX" id="maxX" type="number">
       <label for="maxY">Max Y</label><input v-model="maxY" id="maxY" type="number">
+      <label for="fn">Max Y</label><input v-model="fn" id="fn">
     </div>
     <canvas id="canvas" width="600" height="600" class="mainCanvas"></canvas>
   </div>
@@ -22,6 +23,7 @@ export default class HelloWorld extends Vue {
   msg = 'Chart 3D'
   maxX = 2
   maxY = 1
+  fn = "Math.sin(x)"
 
   mounted(): void {
     this.vueCanvas = document
@@ -36,6 +38,11 @@ export default class HelloWorld extends Vue {
     const marginX = 10;
     const canvasHeight = 600;
     const marginY = 10;
+
+    const fnDef = this.fn
+    const fn = function (x: number) {
+      return eval(fnDef)
+    }
 
     const maxX = this.maxX * Math.PI;
     const convertWidth = function (width: number): number {
@@ -113,7 +120,7 @@ export default class HelloWorld extends Vue {
     let y = 0;
     for (x = -maxX; x <= maxX; x = x+1/maxX)
     {
-      y = Math.sin(x);
+      y = fn(x);
       lineTo(x,y);
     }
     ctx.stroke();
