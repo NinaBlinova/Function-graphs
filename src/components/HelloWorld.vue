@@ -4,8 +4,10 @@
 
     <div id="rectangle" class="mainControls">
 
-      <label for="fn" class="CharacteristicsOfTheText1">function</label>
-      <input v-model="fn" id="fn" class="EnteringValues1">
+      <div v-for="fn in fns" :key="fn.id">
+        <label :for="fn.id" class="CharacteristicsOfTheText1">function</label>
+        <input v-model="fn.fn" :id="fn.id" class="EnteringValues1">
+      </div>
 
       <label for="maxX" class="CharacteristicsOfTheText2">Max X (* pi)</label>
       <input v-model="maxX" id="maxX" type="number" class="EnteringValues2">
@@ -13,7 +15,8 @@
       <label for="maxY" class="CharacteristicsOfTheText3">Max Y</label>
       <input v-model="maxY" id="maxY" type="number" class="EnteringValues3">
 
-      <button v-on:click="drawRect" class="Butt">Function</button>
+      <button v-on:click="drawRect" class="Butt">Draw functions</button>
+      <button v-on:click="addFunction" class="Butt">Add Function</button>
 
     </div>
     <canvas id="canvas" width="600" height="600" class="mainCanvas"></canvas>
@@ -25,18 +28,36 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
+class FunctionDefinition {
+  constructor(id: number, fn: string, color: string) {
+    this.id = id
+    this.fn = fn
+    this.color = color
+  }
+  public id: number
+  public fn: string
+  public color: string
+}
+
 @Component
 export default class HelloWorld extends Vue {
   vueCanvas!: object
   msg = 'Chart 3D'
   maxX = 2
   maxY = 1
-  fn = "Math.sin(x)"
+  fns = [
+    new FunctionDefinition(1, "Math.sin(x)", "#29a0a4")
+  ]
 
   mounted(): void {
     this.vueCanvas = document
         .getElementById("canvas")
         .getContext("2d");
+  }
+
+  addFunction() {
+    const idnextId = this.fns.length + 1;
+    this.fns.push(new FunctionDefinition(idnextId, "x", "green"))
   }
 
   drawRect() {
@@ -46,11 +67,6 @@ export default class HelloWorld extends Vue {
     const marginX = 10;
     const canvasHeight = 600;
     const marginY = 10;
-
-    const fnDef = this.fn
-    const fn = function (x: number) {
-      return eval(fnDef)
-    }
 
     const maxX = this.maxX * Math.PI;
     const convertWidth = function (width: number): number {
@@ -148,22 +164,26 @@ export default class HelloWorld extends Vue {
     }
     ctx.stroke();
 
-    //график
-    ctx.beginPath();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = '#29a0a4';
-    let x = 0;
-    let y = 0;
-    moveTo(-maxX,fn(-maxX));
-    for (x = -maxX; x < maxX; x = x+1/maxX)
-    {
-      y = fn(x);
-      console.info('y = ');
-      IntersectionOfLines(x, y, x+1/maxX, fn(x+1/maxX))
+    this.fns.forEach(fnDef => {
+      const fn = function (x: number) {
+        return eval(fnDef.fn)
+      }
+      //график
+      ctx.beginPath();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = fnDef.color;
+      let x = 0;
+      let y = 0;
+      moveTo(-maxX,fn(-maxX));
+      for (x = -maxX; x < maxX; x = x+1/maxX)
+      {
+        y = fn(x);
+        console.info('y = ');
+        IntersectionOfLines(x, y, x+1/maxX, fn(x+1/maxX))
 
       }
-    ctx.stroke();
-
+      ctx.stroke();
+    })
     //название осей
 
     ctx.beginPath();
