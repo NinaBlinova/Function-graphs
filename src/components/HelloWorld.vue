@@ -39,6 +39,15 @@ class FunctionDefinition {
   public color: string
 }
 
+class Point {
+  constructor(x: number, y: number) {
+    this.x = x
+    this.y = y
+  }
+  public x: number;
+  public y: number;
+}
+
 @Component
 export default class HelloWorld extends Vue {
   vueCanvas!: object
@@ -106,28 +115,28 @@ export default class HelloWorld extends Vue {
       ctx.fillText(str, convertX(x), convertY(y));
     }
 
-    const IntersectionOfLines = function (x1: number, y1: number, x2: number, y2: number): void{
-      if (y2 < maxY && y2 > -maxY && y1 < maxY && y1 > -maxY)
+    const IntersectionOfLines = function (a: Point, b: Point): void{
+      if (b.y < maxY && b.y > -maxY && a.y < maxY && a.y > -maxY)
       {
-        moveTo(x1,y1);
-        lineTo(x2,y2);
+        moveTo(a.x,a.y);
+        lineTo(b.x,b.y);
       }
-      else if (y2 > maxY && y1 < maxY && y1 > -maxY) // 1 and 2 fourth
+      else if (b.y > maxY && a.y < maxY && a.y > -maxY) // 1 and 2 fourth
       {
-        moveTo(x1,y1);
-        lineTo((maxY - y1)*(x1 - x2) / (y1 - y2) + x1, maxY)
+        moveTo(a.x,a.y);
+        lineTo((maxY - a.y)*(a.x - b.x) / (a.y - b.y) + a.x, maxY)
       }
-      else if (y2 < maxY && y1 > maxY && y2 > -maxY) {
-        moveTo(x2,y2);
-        lineTo((maxY - y2)*(x2 - x1) / (y2 - y1) + x2, maxY)
+      else if (b.y < maxY && a.y > maxY && b.y > -maxY) {
+        moveTo(b.x,b.y);
+        lineTo((maxY - b.y)*(b.x - a.x) / (b.y - a.y) + b.x, maxY)
       }
-      else if (y2 < -maxY && y1 > -maxY && y1 < maxY) { // 3 and 3 fourth
-        moveTo(x1,y1);
-        lineTo((-maxY - y1)*(x1 - x2) / (y1 - y2) + x1, -maxY)
+      else if (b.y < -maxY && a.y > -maxY && a.y < maxY) { // 3 and 3 fourth
+        moveTo(a.x,a.y);
+        lineTo((-maxY - a.y)*(a.x - b.x) / (a.y - b.y) + a.x, -maxY)
       }
-      else if ( y1 < -maxY && y2 > -maxY && y2 < maxY) { // 3 and 3 fourth
-        moveTo(x2,y2);
-        lineTo((-maxY - y2)*(x2 - x1) / (y2 - y1) + x2, -maxY)
+      else if ( a.y < -maxY && b.y > -maxY && b.y < maxY) { // 3 and 3 fourth
+        moveTo(b.x,b.y);
+        lineTo((-maxY - b.y)*(b.x - a.x) / (b.y - a.y) + b.x, -maxY)
       }
     }
 
@@ -179,7 +188,7 @@ export default class HelloWorld extends Vue {
       {
         y = fn(x);
         console.info('y = ');
-        IntersectionOfLines(x, y, x+1/maxX, fn(x+1/maxX))
+        IntersectionOfLines(new Point(x, y), new Point(x+1/maxX, fn(x+1/maxX)))
 
       }
       ctx.stroke();
