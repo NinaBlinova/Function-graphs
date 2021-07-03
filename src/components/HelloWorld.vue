@@ -4,23 +4,44 @@
 
     <div id="rectangle" class="mainControls">
 
-      <div v-for="fn in fns" :key="fn.id">
-        <label :for="fn.id" class="CharacteristicsOfTheText1">function</label>
-        <input v-model="fn.fn" :id="fn.id" class="EnteringValues1">
-      </div>
+      <label for="fnName" class="CharacteristicsOfTheText1">F(X) = </label>
+      <input v-model="functionName" id="fnName" class="EnteringValues1">
 
-      <label for="maxX" class="CharacteristicsOfTheText2">Max X (* pi)</label>
+      <label for="maxX" class="CharacteristicsOfTheText2">Max X =
+        <div id="v-model-checkbox1" class="PI">
+        <input type="checkbox" id="checkbox1" v-model="PIx" />
+        <label for="checkbox1">{{ "×" + "\u03C0" }}</label>
+      </div></label>
       <input v-model="maxX" id="maxX" type="number" class="EnteringValues2">
 
-      <label for="maxY" class="CharacteristicsOfTheText3">Max Y</label>
+      <label for="maxY" class="CharacteristicsOfTheText3">Max Y =
+        <div id="v-model-checkbox2" class="PI">
+          <input type="checkbox" id="checkbox2" v-model="PIy" />
+          <label for="checkbox2">{{ "×" + "\u03C0" }}</label>
+        </div></label>
       <input v-model="maxY" id="maxY" type="number" class="EnteringValues3">
 
-      <button v-on:click="drawRect" class="Butt">Draw functions</button>
-      <button v-on:click="addFunction" class="Butt">Add Function</button>
+      <label for="functionColor" class = "CharacteristicsOfTheText4">Function Color:</label>
+      <input v-model="functionColor" id="functionColor" type="color" class="EnteringValues4">
+
+      <button v-on:click="addFunction" class="Butt2">Add Function</button>
+      <button v-on:click="drawRect" class="Butt1">Draw functions</button>
 
     </div>
     <canvas id="canvas" width="600" height="600" class="mainCanvas"></canvas>
+    <div id="rectangle2" class="FunctionList">
+      <div v-for="fn in fns" :key="fn.id">
+        <label :for="fn.id" class="CharacteristicsOfTheText1"></label>
+
+        <ul class="ListFunctionСharacteristic" >
+        <li :style='{"border-left-color": fn.color}'>{{ fn.fn }}</li>
+        </ul>
+
+      </div>
+    </div>
   </div>
+
+
 
 </template>
 
@@ -52,11 +73,16 @@ class Point {
 export default class HelloWorld extends Vue {
   vueCanvas!: object
   msg = 'Chart 3D'
-  maxX = 2
-  maxY = 1
-  fns = [
-    new FunctionDefinition(1, "Math.sin(x)", "#29a0a4")
+  maxX = 4
+  maxY = 4
+  functionName = "Math.cos(x)"
+  functionColor = "#29a0a4"
+  PIx = false
+  PIy = false
+  fns: FunctionDefinition[] = [
+    //new FunctionDefinition(1, "Math.sin(x)", "#29a0a4")
   ]
+
 
   mounted(): void {
     this.vueCanvas = document
@@ -66,7 +92,7 @@ export default class HelloWorld extends Vue {
 
   addFunction() {
     const idnextId = this.fns.length + 1;
-    this.fns.push(new FunctionDefinition(idnextId, "x", "green"))
+    this.fns.push(new FunctionDefinition(idnextId, this.functionName, this.functionColor))
   }
 
   drawRect() {
@@ -76,8 +102,12 @@ export default class HelloWorld extends Vue {
     const marginX = 10;
     const canvasHeight = 600;
     const marginY = 10;
+    const cloneLimit = 14;
 
-    const maxX = this.maxX * Math.PI;
+    let maxX = this.maxX
+    if (this.PIx){
+       maxX = this.maxX * Math.PI;
+    }
     const convertWidth = function (width: number): number {
       const aX = (canvasWidth - 2 * marginX) / (2 * maxX);
       return width * aX;
@@ -86,8 +116,10 @@ export default class HelloWorld extends Vue {
       const bX = canvasWidth / 2;
       return convertWidth(x) + bX
     }
-
-    const maxY = this.maxY;
+    let maxY = this.maxY
+    if (this.PIy){
+      maxY = this.maxY * Math.PI;
+    }
     const convertHeight = function (height: number): number {
       const aY = (canvasHeight - 2 * marginY) / (2 * maxY);
       return height * aY;
@@ -96,11 +128,6 @@ export default class HelloWorld extends Vue {
       const bY = canvasHeight / 2;
       return -convertHeight(y) + bY
     }
-    const crossing = function (x1: number, y1: number, x2: number, y2: number): number{
-      return x2 - marginX*(x2 - x1)/(y2 - y1);
-    }
-
-
 
     const rect = function (x: number, y: number, width: number, height: number): void {
       ctx.rect(convertX(x), convertY(y), convertWidth(width), convertHeight(height));
@@ -140,6 +167,8 @@ export default class HelloWorld extends Vue {
       }
     }
 
+
+
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     ctx.beginPath();
@@ -160,14 +189,22 @@ export default class HelloWorld extends Vue {
 
     ctx.beginPath();
     ctx.lineWidth = 1;
+    let unitSegmentX = 1;
+    if (this.PIx) {
+      unitSegmentX = Math.PI;
+    }
     //Цикл для рисования сетки по ОХ
-    for (let x1 = -maxX; x1 < maxX; x1 = x1 + Math.PI) {
+    for (let x1 = -maxX; x1 < maxX; x1 = x1 + unitSegmentX) {
       moveTo(x1, -maxY);
       lineTo(x1, maxY);
     }
 
+    let unitSegmentY = 1;
+    if (this.PIy) {
+      unitSegmentY = Math.PI;
+    }
     //Цикл для рисования сетки по ОY
-    for (let y1 = -maxY; y1 < maxY; y1++) {
+    for (let y1 = -maxY; y1 < maxY; y1 = y1 + unitSegmentY) {
       moveTo(-maxX, y1);
       lineTo(maxX, y1);
     }
@@ -183,6 +220,7 @@ export default class HelloWorld extends Vue {
       ctx.strokeStyle = fnDef.color;
       let x = 0;
       let y = 0;
+
       moveTo(-maxX,fn(-maxX));
       for (x = -maxX; x < maxX; x = x+1/maxX)
       {
@@ -193,21 +231,32 @@ export default class HelloWorld extends Vue {
       }
       ctx.stroke();
     })
+
     //название осей
 
     ctx.beginPath();
     ctx.lineWidth = 1;
     ctx.strokeStyle = "#08191c";
-    ctx.font = '10px cursive';
-    for (let i = -2*maxX; i < maxX; i = i + Math.PI) {
+    ctx.font = '10px Courier New, monospace';
+
+    let unitSegmentXforTextX = 1;
+    if (this.PIx) {
+      unitSegmentXforTextX = Math.PI;
+    }
+    for (let i = -2*maxX; i < maxX; i = i + unitSegmentXforTextX) {
       moveTo(i, maxY/20);
       lineTo(i , -maxY/20);
       fillText(i.toFixed(2), i, -maxY/8);
     }
-    for (let i=-2*maxY; i <  maxY; i = i + 1) {
+
+    let unitSegmentXforTextY = 1;
+    if (this.PIy) {
+      unitSegmentXforTextY = Math.PI;
+    }
+    for (let i=-2*maxY; i <  maxY; i = i + unitSegmentXforTextY) {
       moveTo(maxX/20, i);
       lineTo(-maxX/20, i);
-      fillText(i+'', maxX/8, i);
+      fillText(i.toFixed(2), maxX/8, i);
     }
     ctx.stroke();
   }
@@ -225,18 +274,29 @@ export default class HelloWorld extends Vue {
   position: relative;
   text-align: left;
   font-family: cursive;
+  border: 4px double #364a52;
+}
+.FunctionList {
+  width: 300px;
+  height: 600px;
+  background-color: #89c7d2;
+  border-radius: 70px;
+  border: 4px double #364a52;
+  float: left;
+  display: inline;
+  position: relative;
+  text-align: left;
+  font-family: cursive;
 }
 
 .CharacteristicsOfTheText1{
-  left: 5px;
   position: absolute;
-  top: 48px;
   display: table-caption;
+  margin: 5% 9%;
 }
 .CharacteristicsOfTheText2{
-  left: 5px;
+  margin: 20% 2%;
   position: absolute;
-  top: 96px;
   display: table-caption;
 }
 .CharacteristicsOfTheText3{
@@ -246,20 +306,34 @@ export default class HelloWorld extends Vue {
   display: table-caption;
 }
 
+.CharacteristicsOfTheText4{
+  margin: 77% 2%;
+  position: absolute;
+  display: table-caption;
+}
+
 .EnteringValues1 {
-  margin-top: 18%;
   float: right;
   border-radius: 40px;
+  margin: 5% 9%; /* сверху | справа | снизу | слева */
 }
 
 .EnteringValues2 {
-  margin-top: 8%;
+  margin: 4% 9%;
   float: right;
   border-radius: 40px;
 }
 
 .EnteringValues3 {
-  margin-top: 9%;
+  margin: 16% 9%;
+  float: right;
+  border-radius: 40px;
+}
+
+.EnteringValues4 {
+  width: 120px;
+  height: 20px;
+  margin: 6% 7%;
   float: right;
   border-radius: 40px;
 }
@@ -272,22 +346,74 @@ export default class HelloWorld extends Vue {
 }
 
 
-.Butt {
+.Butt1 {
   font-family: cursive;
   float: right;
   position: absolute;
-  bottom: 0px;
-  left: 38%;
+  bottom: -40px;
+  right: 10%;
   display:block;
   color: #244950;
   text-decoration: none;
 }
-.Butt:visited {
+.Butt1:visited {
   color: #68b1bf;
 }
-.Butt:hover {
+.Butt1:hover {
   color: #2b3c62;
   box-shadow: inset 0 0 0 23px #5e9fb4;
 }
+
+.Butt2 {
+  font-family: cursive;
+  float: right;
+  position: absolute;
+  bottom: -40px;
+  left: 10%;
+  display:block;
+  color: #244950;
+  text-decoration: none;
+}
+.Butt2:visited {
+  color: #68b1bf;
+}
+.Butt2:hover {
+  color: #2b3c62;
+  box-shadow: inset 0 0 0 23px #5e9fb4;
+}
+.PI {
+  font-family: cursive;
+  font-size: 20px;
+  width: 50px;
+  height: 30px;
+  border-radius: 2px;
+  border: 4px double #364a52;
+  margin: 5% 2%;
+}
+
+.ListFunctionСharacteristic {
+  list-style: none;
+  padding: 0;
+}
+.ListFunctionСharacteristic li {
+  width: 130px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: cursive;
+  padding: 1px 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border-left: 10px solid #f05d22;
+  box-shadow: 2px -2px 5px 0 rgba(0,0,0,.1),
+  -2px -2px 5px 0 rgba(0,0,0,.1),
+  2px 2px 5px 0 rgba(0,0,0,.1),
+  -2px 2px 5px 0 rgba(0,0,0,.1);
+  font-size: 20px;
+  letter-spacing: 2px;
+  transition: 0.3s all linear;
+}
+.ListFunctionСharacteristic li:hover {border-left: 10px solid transparent;}
+.ListFunctionСharacteristic li:nth-child(1):hover {border-right: 10px solid #f05d22;}
+
 
 </style>
