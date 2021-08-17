@@ -17,7 +17,14 @@
         <div id="v-model-checkbox1" class="PI">
         <input type="checkbox" id="checkbox1" v-model="PIx" />
         <label for="checkbox1">{{ "×" + "\u03C0" }}</label>
+
+          <div id="v-model-checkbox3" class="ef">
+          <input type="checkbox" id="checkbox3" v-model="ef" />
+            <label for="checkbox1">{{ "×" + "80" }}</label></div>
+
       </div></label>
+
+
       <input v-model="maxX" id="maxX" type="number" class="EnteringValues2">
 
       <label for="maxY" class="CharacteristicsOfTheText3">Max Y =
@@ -36,14 +43,6 @@
                v-html="predefinedFunction.display"
                :key="predefinedFunction.id"
                v-on:click="onPredefinedFunctionClick(predefinedFunction)"></div>
-          <span><sup>n</sup>&#8730;x<sup>m</sup></span>
-          <span>log<sub>n</sub>x</span>
-          <span>(&#925;)<sup>x</sup></span>
-          <span>|x|</span>
-          <span>sign(x)</span>
-          <span><sup>1</sup>/<sub>&#402;(x)</sub></span>
-          <span>&#402;(<sup>1</sup>/<sub>x</sub>)</span>
-          <span>&#176;</span>
         <div>
           <div class="choosing1">
             <select>
@@ -66,7 +65,6 @@
           </div>
         </div>
           <div v-on:click="eraser(functionName)" class = 'C'>Eraser</div>
-
         </div>
       </div>
 
@@ -121,15 +119,48 @@ class Point {
   public y: number;
 }
 
+enum Compose {
+  NONE,
+  DIRECT,
+  REVERSE
+}
+
 class PredefinedFunction {
-  constructor(id: number, display: string, text: string) {
+  constructor(id: number, display: string, text: string, compose: Compose) {
     this.id = id
     this.display = display
     this.text = text
+    this.compose = compose
   }
   public id: number;
   public display: string;
   public text: string;
+  public compose: Compose;
+}
+
+function Log(n: number, x: number) {
+  return Math.log(x) / Math.log(n);
+}
+function ABS(x: number) {
+  return Math.abs(x)
+}
+function degToRad (deg: number)
+{
+  return (Math.PI * deg) / 180;
+}
+function  Root2 (x: number, n: number, m: number) {
+  if (x > 0) {
+    return Math.pow(x, (m/n))
+  }
+   return -1 * Math.pow(-x,(m/n))
+}
+function  Root1 (x: number, n: number, m: number) {
+  if (x > 0) {
+    return Math.pow(x, (m/n))
+  }
+}
+function EF(N: number, x: number) {
+  return N ** x
 }
 
 @Component
@@ -142,6 +173,7 @@ export default class HelloWorld extends Vue {
   functionColor = "#29a0a4"
   PIx = false
   PIy = false
+  ef = false
   fns: FunctionDefinition[] = [
     //new FunctionDefinition(1, "Math.sin(x)", "#29a0a4")
   ]
@@ -149,9 +181,18 @@ export default class HelloWorld extends Vue {
   funcSymbols = ["ƒ(x)", "α(x)", "β(x)", "γ(x)", "ζ(x)", "ϑ(x)", "ϰ(x)", "φ(x)", " χ(x)", "ψ(x)", "ω(x)", "ϱ(x)"]
   nextId = 1
   funcOperators = [
-    new PredefinedFunction(1, "<span>x<sup>m/n</sup></span>", "Math.pow(x, m / n)")
-  ]
+    new PredefinedFunction(1, "<span>x<sup>m/n</sup></span>", "x**(m/n)", Compose.NONE),
+    new PredefinedFunction(2, "<span>log<sub>n</sub>x</span>", "Log(n,x)", Compose.NONE),
+    new PredefinedFunction(3, "<span><sup>2n</sup>&#8730;x<sup>m</sup></span>", "Root1(x, n, m)", Compose.NONE),
+    new PredefinedFunction(4, "<span><sup>2n+1</sup>&#8730;x<sup>m</sup></span>", "Root2(x, n, m)", Compose.NONE),
+    new PredefinedFunction(5, "<span>(&#925;)<sup>x</sup></span>", "EF(N, x)", Compose.NONE),
+    new PredefinedFunction(6, "<span>|x|</span>", "ABS(x)", Compose.NONE),
 
+    new PredefinedFunction(7, "<span>sign(x)</span>", "SIGN(x)", Compose.NONE),
+
+    new PredefinedFunction(8, "<span><sup>1</sup>/<sub>&#402;(x)</sub></span>", "1/ƒ(x)", Compose.DIRECT),
+    new PredefinedFunction(9, "<span>&#402;(<sup>1</sup>/<sub>x</sub>)</span>", "1/x", Compose.REVERSE)
+  ]
 
 
   mounted(): void {
@@ -180,7 +221,17 @@ export default class HelloWorld extends Vue {
 
   onPredefinedFunctionClick(fn: PredefinedFunction) {
     console.info(fn)
-    this.functionName = fn.text
+    switch (fn.compose) {
+      case Compose.NONE:
+        this.functionName = fn.text
+        break
+      case Compose.DIRECT:
+        this.functionName = fn.text.replace("ƒ(x)", "(" + this.functionName + ")")
+        break
+      case Compose.REVERSE:
+        this.functionName = this.functionName.replace(/(?!\w)*x(?!\w)*/g, "(" + fn.text + ")")
+        break
+    }
   }
 
   drawRect() {
@@ -332,7 +383,20 @@ export default class HelloWorld extends Vue {
 
         }
         ctx.stroke();
-      } else {
+      }
+      else if (this.ef) {
+        const stepFunction = maxX * 80
+        moveTo(-stepFunction,fn(-stepFunction));
+        for (x = -stepFunction; x < stepFunction; x = x+ 1/stepFunction)
+        {
+          y = fn(x);
+          console.info('x = ' + x + ', y = ' + y);
+          IntersectionOfLinesX(new Point(x, y), new Point(x+1/stepFunction, fn(x+1/stepFunction)))
+
+        }
+        ctx.stroke();
+      }
+      else {
         const stepFunction = maxX * 10
         moveTo(-stepFunction,fn(-stepFunction));
         for (x = -stepFunction; x < stepFunction; x = x+ 1/stepFunction)
@@ -557,6 +621,16 @@ export default class HelloWorld extends Vue {
   margin: 5% 2%;
 }
 
+.ef {
+  font-family: "Times New Roman";
+  font-size: 20px;
+  width: 70px;
+  height: 30px;
+  border-radius: 2px;
+  border: 4px double #459295;
+  margin: -65% 100%;
+}
+
 .ListFunctionСharacteristic {
   list-style: none;
   padding: 0;
@@ -667,7 +741,7 @@ export default class HelloWorld extends Vue {
   top: 20px;
   right: -15px;
   cursor: pointer;
-  width: 66px;
+  width: 76px;
   height: 36px;
   line-height: 27px;
   text-align: center;
