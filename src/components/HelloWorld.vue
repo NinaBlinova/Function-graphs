@@ -45,23 +45,14 @@
                v-on:click="onPredefinedFunctionClick(predefinedFunction)"></div>
         <div>
           <div class="choosing1">
-            <select>
-              <option>sin(x)</option>
-              <option>cos(x)</option>
-              <option>tg(x)</option>
-              <option>ctg(x)</option>
-              <option>arcsin(x)</option>
-              <option>arccos(x)</option>
-              <option>arctg(x)</option>
-              <option>arcctg(x)</option>
+            <select  v-model="selectedDisplayShapeText" v-on:change="onPredefinedFunctionClickTrig($event)">
+              <option v-for="predefinedFunctionTrigonometry in funcOperatorsTrigonometry"
+                    v-html="predefinedFunctionTrigonometry.display"
+                    :key="predefinedFunctionTrigonometry.id">
+
+            </option>
             </select>
 
-            <div class="choosing2">
-              <select>
-                <option>&#960;</option>
-                <option>&#949;</option>
-              </select>
-              </div>
           </div>
         </div>
           <div v-on:click="eraser(functionName)" class = 'C'>Eraser</div>
@@ -88,14 +79,12 @@
     </div>
 
   </div>
-
-
-
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import {Point, Line, Context} from '@/canvas'
 
 class FunctionDefinition {
   constructor(id: number, fn: string, color: string, symbol: string) {
@@ -108,15 +97,6 @@ class FunctionDefinition {
   public fn: string
   public color: string
   public symbol: string
-}
-
-class Point {
-  constructor(x: number, y: number) {
-    this.x = x
-    this.y = y
-  }
-  public x: number;
-  public y: number;
 }
 
 enum Compose {
@@ -136,6 +116,17 @@ class PredefinedFunction {
   public display: string;
   public text: string;
   public compose: Compose;
+}
+
+class PredefinedFunctionTrigonometry {
+  constructor(id: number, display: string, text: string) {
+    this.id = id
+    this.display = display
+    this.text = text
+  }
+  public id: number;
+  public display: string;
+  public text: string;
 }
 
 function Log(n: number, x: number) {
@@ -163,13 +154,44 @@ function EF(N: number, x: number) {
   return N ** x
 }
 
+function sin(x: number) {
+  return Math.sin(x)
+}
+function cos(x: number) {
+  return Math.cos(x)
+}
+function tg(x: number) {
+  return Math.tan(x)
+}
+function ctg(x: number) {
+  return 1 / Math.tan(x);
+}
+function arcsin(x: number) {
+  return Math.asin(x)
+}
+function arccos(x: number) {
+  return Math.acos(x)
+}
+function arctg(x: number) {
+  return Math.atan(x)
+}
+function arcctg(x: number) {
+  return Math.PI / 2 - Math.atan(x);
+}
+function PI () {
+  return Math.PI
+}
+
 @Component
 export default class HelloWorld extends Vue {
-  vueCanvas!: object
+  vueCanvas!: any
   msg = 'Plotting the function'
   maxX = 4
   maxY = 4
   functionName = "Math.tan(x)"
+
+  selectedDisplayShapeText = ""
+
   functionColor = "#29a0a4"
   PIx = false
   PIy = false
@@ -187,18 +209,24 @@ export default class HelloWorld extends Vue {
     new PredefinedFunction(4, "<span><sup>2n+1</sup>&#8730;x<sup>m</sup></span>", "Root2(x, n, m)", Compose.NONE),
     new PredefinedFunction(5, "<span>(&#925;)<sup>x</sup></span>", "EF(N, x)", Compose.NONE),
     new PredefinedFunction(6, "<span>|x|</span>", "ABS(x)", Compose.NONE),
-
     new PredefinedFunction(7, "<span>sign(x)</span>", "SIGN(x)", Compose.NONE),
-
     new PredefinedFunction(8, "<span><sup>1</sup>/<sub>&#402;(x)</sub></span>", "1/ƒ(x)", Compose.DIRECT),
     new PredefinedFunction(9, "<span>&#402;(<sup>1</sup>/<sub>x</sub>)</span>", "1/x", Compose.REVERSE)
   ]
+  funcOperatorsTrigonometry = [
+      new PredefinedFunctionTrigonometry(1, "sin(x)", "sin(x)"),
+      new PredefinedFunctionTrigonometry(2, "cos(x)", "cos(x)"),
+      new PredefinedFunctionTrigonometry(3, "tg(x)", "tg(x)"),
+      new PredefinedFunctionTrigonometry(4, "ctg(x)", "ctg(x)"),
 
+      new PredefinedFunctionTrigonometry(5, "arcsin(x)", "arcsin(x)"),
+      new PredefinedFunctionTrigonometry(6, "arccos(x)", "arccos(x)"),
+      new PredefinedFunctionTrigonometry(7, "arctg(x)", "arctg(x)"),
+      new PredefinedFunctionTrigonometry(8, "arcctg(x)", "arcctg(x)")
+  ]
 
   mounted(): void {
-    this.vueCanvas = document
-        .getElementById("canvas")
-        .getContext("2d");
+    this.vueCanvas = (document.getElementById("canvas") as any).getContext("2d");
   }
 
   addFunction() {
@@ -229,125 +257,63 @@ export default class HelloWorld extends Vue {
         this.functionName = fn.text.replace("ƒ(x)", "(" + this.functionName + ")")
         break
       case Compose.REVERSE:
-        this.functionName = this.functionName.replace(/(?!\w)*x(?!\w)*/g, "(" + fn.text + ")")
+        this.functionName = this.functionName.replace(/(?!\w)*x(?!\w)*/g, "("+fn.text+")")
         break
     }
   }
 
-  drawRect() {
-    const ctx = this.vueCanvas;
+  onPredefinedFunctionClickTrig() {
+    this.functionName = this.selectedDisplayShapeText
+  }
 
-    const canvasWidth = 600;
-    const marginX = 10;
-    const canvasHeight = 600;
-    const marginY = 10;
-
-
-    let maxX = this.maxX
-    if (this.PIx){
-       maxX = this.maxX * Math.PI;
-    }
-    const convertWidth = function (width: number): number {
-      const aX = (canvasWidth - 2 * marginX) / (2 * maxX);
-      return width * aX;
-    }
-    const convertX = function (x: number): number {
-      const bX = canvasWidth / 2;
-      return convertWidth(x) + bX
-    }
+  private calculateMaxY() {
     let maxY = this.maxY
-    if (this.PIy){
+    if (this.PIy) {
       maxY = this.maxY * Math.PI;
     }
-    const convertHeight = function (height: number): number {
-      const aY = (canvasHeight - 2 * marginY) / (2 * maxY);
-      return height * aY;
-    }
-    const convertY = function (y: number): number {
-      const bY = canvasHeight / 2;
-      return -convertHeight(y) + bY
-    }
+    return maxY;
+  }
 
-    const rect = function (x: number, y: number, width: number, height: number): void {
-      ctx.rect(convertX(x), convertY(y), convertWidth(width), convertHeight(height));
+  private calculateMaxX() {
+    let maxX = this.maxX
+    if (this.PIx) {
+      maxX = this.maxX * Math.PI;
     }
-    const moveTo = function (x: number, y: number): void {
-      ctx.moveTo(convertX(x), convertY(y));
-    }
-    const lineTo = function (x: number, y: number): void {
-      ctx.lineTo(convertX(x), convertY(y));
-    }
-    const fillText = function (str: string, x: number, y: number): void {
-      ctx.fillText(str, convertX(x), convertY(y));
-    }
+    return maxX;
+  }
 
-    const IntersectionOfLinesY = function (a: Point, b: Point): void{
+  drawRect() {
+    const maxX = this.calculateMaxX();
+    const maxY = this.calculateMaxY();
+    const ctx = new Context(this.vueCanvas, 600, 10, 600, 10, maxX, maxY);
 
-      if (b.y < maxY && b.y > -maxY && a.y < maxY && a.y > -maxY)
-      {
-        moveTo(a.x,a.y);
-        lineTo(b.x,b.y);
-      }
-      else if (b.y > maxY && a.y < maxY && a.y > -maxY) // 1 and 2 fourth
-      {
-        moveTo(a.x,a.y);
-        lineTo((maxY - a.y)*(a.x - b.x) / (a.y - b.y) + a.x, maxY)
-      }
-      else if (b.y < maxY && a.y > maxY && b.y > -maxY) {
-        moveTo(b.x,b.y);
-        lineTo((maxY - b.y)*(b.x - a.x) / (b.y - a.y) + b.x, maxY)
-      }
-      else if (b.y < -maxY && a.y > -maxY && a.y < maxY) {
-        moveTo(a.x,a.y);
-        lineTo((-maxY - a.y)*(a.x - b.x) / (a.y - b.y) + a.x, -maxY)
-      }
-      else if ( a.y < -maxY && b.y > -maxY && b.y < maxY) {
-        moveTo(b.x,b.y);
-        lineTo((-maxY - b.y)*(b.x - a.x) / (b.y - a.y) + b.x, -maxY)
-      }
-    }
-
-    const IntersectionOfLinesX = function (a: Point, b: Point): void{
-      if (b.x < maxX && b.x > -maxX && a.x < maxX && a.x > -maxX)
-      {
-        IntersectionOfLinesY(new Point(a.x, a.y), new Point(b.x,b.y))
-      }
-      else if (b.x > maxX && a.x < maxX && a.x > -maxX){
-        IntersectionOfLinesY(new Point(a.x, a.y), new Point(maxX, (maxX - b.x) * (a.y - b.y) / (a.x - b.x) + b.y))
-      }
-      else if (a.x > maxX && b.x < maxX && b.x > -maxX) {
-        IntersectionOfLinesY(new Point(b.x,b.y), new Point(maxX, (maxX - a.x) * (b.y - a.y) / (b.x - a.x) + a.y))
-      }
-    }
-
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.clearRect();
 
     ctx.beginPath();
-    rect(-maxX, maxY, 2 * maxX, 2 * maxY);
-    ctx.strokeStyle = '#22695c';
-    ctx.lineWidth = 2;
+    ctx.rect(-maxX, maxY, 2 * maxX, 2 * maxY);
+    ctx.setStrokeStyle('#22695c');
+    ctx.setLineWidth(2);
 
     //ось ОХ
-    moveTo(maxX, 0);
-    lineTo(-maxX, 0);
+    ctx.moveTo(new Point(maxX, 0))
+    ctx.lineTo(new Point(-maxX, 0))
 
     //ось ОУ
-    moveTo(0, maxY);
-    lineTo(0, -maxY);
-
+    ctx.moveTo(new Point(0, maxY))
+    ctx.lineTo(new Point(0, -maxY))
 
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.lineWidth = 1;
+    ctx.setLineWidth(1);
     let unitSegmentX = 1;
     if (this.PIx) {
       unitSegmentX = Math.PI;
     }
     //Цикл для рисования сетки по ОХ
     for (let x1 = -maxX; x1 < maxX; x1 = x1 + unitSegmentX) {
-      moveTo(x1, -maxY);
-      lineTo(x1, maxY);
+      ctx.moveTo(new Point(x1, -maxY))
+      ctx.lineTo(new Point(x1, maxY))
     }
 
     let unitSegmentY = 1;
@@ -356,77 +322,47 @@ export default class HelloWorld extends Vue {
     }
     //Цикл для рисования сетки по ОY
     for (let y1 = -maxY; y1 < maxY; y1 = y1 + unitSegmentY) {
-      moveTo(-maxX, y1);
-      lineTo(maxX, y1);
+      ctx.moveTo(new Point(-maxX, y1))
+      ctx.lineTo(new Point(maxX, y1))
     }
     ctx.stroke();
 
     this.fns.forEach(fnDef => {
+      console.info("fnDef = " + fnDef.fn)
       const fn = function (x: number) {
         return eval(fnDef.fn)
       }
 
       //график
-      ctx.beginPath();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = fnDef.color;
-      let x = 0;
-      let y = 0;
-
       if (this.PIx) {
-        moveTo(-maxX,fn(-maxX));
-        for (x = -maxX; x < maxX; x = x + 1/maxX)
-        {
-          y = fn(x);
-          console.info('x = ' + x + ', y = ' + y);
-          IntersectionOfLinesY(new Point(x, y), new Point(x+1/maxX, fn(x+1/maxX)))
-
-        }
-        ctx.stroke();
-      }
-      else if (this.ef) {
+        const step = 1/maxX;
+        ctx.drawCurve(maxX, step, fn, fnDef.color)
+      } else if (this.ef) {
         const stepFunction = maxX * 80
-        moveTo(-stepFunction,fn(-stepFunction));
-        for (x = -stepFunction; x < stepFunction; x = x+ 1/stepFunction)
-        {
-          y = fn(x);
-          console.info('x = ' + x + ', y = ' + y);
-          IntersectionOfLinesX(new Point(x, y), new Point(x+1/stepFunction, fn(x+1/stepFunction)))
-
-        }
-        ctx.stroke();
-      }
-      else {
+        const step = 1 / stepFunction;
+        ctx.drawCurve(stepFunction, step, fn, fnDef.color)
+      } else {
         const stepFunction = maxX * 10
-        moveTo(-stepFunction,fn(-stepFunction));
-        for (x = -stepFunction; x < stepFunction; x = x+ 1/stepFunction)
-        {
-          y = fn(x);
-          console.info('x = ' + x + ', y = ' + y);
-          IntersectionOfLinesX(new Point(x, y), new Point(x+1/stepFunction, fn(x+1/stepFunction)))
-
-        }
-        ctx.stroke();
+        const step = 1 / stepFunction;
+        ctx.drawCurve(stepFunction, step, fn, fnDef.color)
       }
-
-
     })
 
     //название осей
 
     ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "#08191c";
-    ctx.font = '10px Courier New, monospace';
+    ctx.setLineWidth(1);
+    ctx.setStrokeStyle("#08191c");
+    ctx.setFont('10px Courier New, monospace');
 
     let unitSegmentXforTextX = 1;
     if (this.PIx) {
       unitSegmentXforTextX = Math.PI;
     }
     for (let i = -2*maxX; i < maxX; i = i + unitSegmentXforTextX) {
-      moveTo(i, maxY/20);
-      lineTo(i , -maxY/20);
-      fillText(i.toFixed(2), i, -maxY/8);
+      ctx.moveTo(new Point(i, maxY / 20))
+      ctx.lineTo(new Point(i, -maxY / 20))
+      ctx.fillText(i.toFixed(2), i, -maxY/8);
     }
 
     let unitSegmentXforTextY = 1;
@@ -434,9 +370,9 @@ export default class HelloWorld extends Vue {
       unitSegmentXforTextY = Math.PI;
     }
     for (let i=-2*maxY; i <  maxY; i = i + unitSegmentXforTextY) {
-      moveTo(maxX/20, i);
-      lineTo(-maxX/20, i);
-      fillText(i.toFixed(2), maxX/8, i);
+      ctx.moveTo(new Point(maxX / 20, i))
+      ctx.lineTo(new Point(-maxX / 20, i))
+      ctx.fillText(i.toFixed(2), maxX/8, i);
     }
     ctx.stroke();
   }
@@ -693,23 +629,10 @@ export default class HelloWorld extends Vue {
   margin: 38px 5%; /* сверху | справа | снизу | слева */
 }
 
-.choosing2 select {
-  background: transparent;
-  width: 85px;
-  height: 45px;
-  border-radius: 20px;
-  padding: 5px;
-  border: 4px double #70d2ff;
-  position: relative;
-  display: table-caption;
-  font-size: 17px;
-  font-family: cursive;
-  margin: -72px 60%; /* сверху | справа | снизу | слева */
-  top: -71px;
-}
+
 
 .C {
-  margin: -17% 5%;
+  margin: -10% 5%;
   width: 50px;
   height: 25px;
   padding: 5px;
