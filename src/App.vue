@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <HelloWorld msg="3D Charting"/>
+    <Title/>
+    <router-link to="/">Main</router-link>
+    <router-link to="/title">Title</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import HelloWorld from './components/HelloWorld.vue';
+import Title from './components/Title.vue'
 
 @Component({
   components: {
     HelloWorld,
-  },
+    Title
+  }
 })
 export default class App extends Vue {}
 </script>
