@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
-import HelloWorld from './components/HelloWorld.vue';
+import Graph from './components/Graph.vue';
 import Title from './components/Title.vue';
+import Properties from './components/Properties.vue';
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
-    {path: '/', component: HelloWorld},
-    {path: '/title', component: Title}
+    {path: '/', component: Graph},
+    {path: '/title', component: Title},
+    {path: '/properties', component: Properties}
   ]
 })
 

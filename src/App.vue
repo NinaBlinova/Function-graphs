@@ -2,19 +2,22 @@
   <div id="app">
     <router-link to="/">Main</router-link>
     <router-link to="/title">Title</router-link>
+    <router-link to="/properties">Properties</router-link>
     <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import Graph from './components/Graph.vue';
 import Title from './components/Title.vue'
+import Properties from './components/Properties.vue'
 
 @Component({
   components: {
-    HelloWorld,
-    Title
+    Graph,
+    Title,
+    Properties
   }
 })
 export default class App extends Vue {}
