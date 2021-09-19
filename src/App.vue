@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <Title/>
     <router-link to="/">Main</router-link>
     <router-link to="/title">Title</router-link>
     <router-view></router-view>
