@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <router-link to="/">Title</router-link>
     <h1 class = 'PageName'>{{ msg }}</h1>
 
     <div id="rectangle" class="mainControls">
@@ -558,13 +559,13 @@ export default class HelloWorld extends Vue {
 }
 
 .ef {
-  font-family: "Times New Roman";
+  font-family: Times, Times New Roman, serif;
   font-size: 20px;
   width: 70px;
   height: 30px;
   border-radius: 2px;
   border: 4px double #459295;
-  margin: -65% 100%;
+  margin: -63% 100%;
 }
 
 .ListFunctionСharacteristic {

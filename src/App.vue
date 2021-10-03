@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <router-link to="/">Main</router-link>
-    <router-link to="/title">Title</router-link>
-    <router-link to="/properties">Properties</router-link>
+
     <router-view></router-view>
   </div>
 </template>
@@ -31,5 +29,6 @@ export default class App extends Vue {}
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  text-decoration: none;
 }
 </style>

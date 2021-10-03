@@ -1,67 +1,68 @@
 <template>
   <div>
-    <h1 class = "TextCharacteristic">Properties</h1>
-
-    <table class="table">
-      <thead>
-      <tr>
-        <th>1) Plot function.</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>2) Plot function + properties of function.</td>
-      </tr>
-      </tbody>
-    </table>
-
-    <img src="../assets/logo.png"/>
+    <router-link to="/">Title</router-link>
+    <h1 class = "TextCharacteristic">Function Graphs + properties of function</h1>
+    <div class="Charact">
+      <div class="TH"> <router-link to="/linearFunction"><img class = "Jpg1" src="../assets/1.jpg"/></router-link></div>
+      <div class="TH"><router-link to="/quadraticFunction"><img class = "Jpg2" src="../assets/2.jpg"/></router-link></div>
+      <div class="TH"><img class = "Jpg3" src="../assets/3.jpg"/></div>
+      <div class="TH"><img class = "Jpg4" src="../assets/4.jpg"/></div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-name: "Title"
-}
+
 </script>
 
 <style>
- .TextCharacteristic {
+.TextCharacteristic {
   font-family: Luminari, fantasy;
 }
+.Charact {
+  font-size: 14px;
+  border-collapse: collapse;
+  text-align: center;
+  display: inline-flex;
+  float:left;
+  margin-left: 190px;
+  margin-top: 10%;
+}
+.TH {
+  margin: auto 80px auto 20px;
+  background:linear-gradient(90deg, #b1d8e8, #ffffff);
+  padding: 10px 15px;
+  width: 250px;
+  height: 250px;
+}
+.TH{
+  border: 5px double #364a52;
+}
+img {
+  margin-right: auto;
+  margin-left: auto;
+}
+.Jpg1 {
+  margin-top: 10%;
+  width: 90%;
+}
+.Jpg2 {
+  margin-top: 20%;
+  width: 105%;
+}
+.Jpg3 {
+  margin-top: 15%;
+  width: 105%;
+}
+.Jpg4 {
+  margin-top: 20%;
+  width: 105%;
+}
 
- .table {
 
-   width: 100%;
-   border: 2px solid #364a52;
-   border-collapse: collapse;
- }
- .table th {
-   font-size: 25px;
-   font-family: cursive;
-   font-weight: bold;
-   padding: 10px;
-   background: #89c7d2;
-   border: 2px solid #364a52;
- }
- .table td {
-   font-size: 25px;
-   font-family: cursive;
-   font-weight: bold;
-   background: #99dde9;
-   padding: 10px;
- }
-
- .table td:hover {
-   -webkit-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
-   -moz-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
-   box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
- }
-
- .table th:hover {
-   -webkit-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
-   -moz-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
-   box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
- }
-
+.TH:hover {
+  -webkit-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
+  -moz-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
+  box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
+}
 </style>
