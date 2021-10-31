@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
-import Graph from './components/Graph.vue';
+import Plot from './components/PlotFunction.vue';
 import Title from './components/Title.vue';
 import Properties from './components/Properties.vue';
 import LinearFunction from './components/LinearFunction.vue';
@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
-    {path: '/graph', component: Graph},
+    {path: '/plot', component: Plot},
     {path: '/', component: Title},
     {path: '/properties', component: Properties},
     {path: '/linearFunction', component: LinearFunction},

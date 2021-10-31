@@ -7,7 +7,7 @@
 
           <thead>
           <tr>
-            <th><router-link to="/graph" >1) Plot function.</router-link ></th>
+            <th><router-link to="/plot" >1) Plot function.</router-link ></th>
           </tr>
           </thead>
           <tbody>

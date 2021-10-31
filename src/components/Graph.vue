@@ -1,8 +1,5 @@
 <template>
   <div class="hello">
-    <router-link to="/">Title</router-link>
-    <h1 class = 'PageName'>{{ msg }}</h1>
-
     <div id="rectangle" class="mainControls">
 
       <label for="fnName" class="CharacteristicsOfTheText1">
@@ -44,19 +41,19 @@
                v-html="predefinedFunction.display"
                :key="predefinedFunction.id"
                v-on:click="onPredefinedFunctionClick(predefinedFunction)"></div>
-        <div>
-          <div class="choosing1">
-            <select  v-model="selectedDisplayShapeText" v-on:change="onPredefinedFunctionClickTrig($event)">
-              <option v-for="predefinedFunctionTrigonometry in funcOperatorsTrigonometry"
-                    v-html="predefinedFunctionTrigonometry.display"
-                    :key="predefinedFunctionTrigonometry.id">
 
-            </option>
-            </select>
-
+          <div>
+            <div class="choosing1" >
+              <select v-model="selectedDisplayShapeText" v-on:change="onPredefinedFunctionClickTrig($event)">
+                <option v-for="predefinedFunctionTrigonometry in funcOperatorsTrigonometry"
+                        v-html="predefinedFunctionTrigonometry.display"
+                        :key="predefinedFunctionTrigonometry.id">
+                </option>
+              </select>
+            </div>
           </div>
-        </div>
-          <div v-on:click="eraser(functionName)" class = 'C'>Eraser</div>
+
+          <div v-on:click="eraser(functionName)" class='C'>Eraser</div>
         </div>
       </div>
 
@@ -86,49 +83,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import {Point, Line, Context} from '@/canvas'
-
-class FunctionDefinition {
-  constructor(id: number, fn: string, color: string, symbol: string) {
-    this.id = id
-    this.fn = fn
-    this.color = color
-    this.symbol = symbol
-  }
-  public id: number
-  public fn: string
-  public color: string
-  public symbol: string
-}
-
-enum Compose {
-  NONE,
-  DIRECT,
-  REVERSE
-}
-
-class PredefinedFunction {
-  constructor(id: number, display: string, text: string, compose: Compose) {
-    this.id = id
-    this.display = display
-    this.text = text
-    this.compose = compose
-  }
-  public id: number;
-  public display: string;
-  public text: string;
-  public compose: Compose;
-}
-
-class PredefinedFunctionTrigonometry {
-  constructor(id: number, display: string, text: string) {
-    this.id = id
-    this.display = display
-    this.text = text
-  }
-  public id: number;
-  public display: string;
-  public text: string;
-}
+import {FunctionDefinition, Compose, PredefinedFunction, PredefinedFunctionTrigonometry} from '@/function'
+import {Prop} from "vue-property-decorator";
 
 function Log(n: number, x: number) {
   return Math.log(x) / Math.log(n);
@@ -186,7 +142,6 @@ function PI () {
 @Component
 export default class HelloWorld extends Vue {
   vueCanvas!: any
-  msg = 'Plotting the function'
   maxX = 4
   maxY = 4
   functionName = "Math.tan(x)"
@@ -197,34 +152,20 @@ export default class HelloWorld extends Vue {
   PIx = false
   PIy = false
   ef = false
-  fns: FunctionDefinition[] = [
-    //new FunctionDefinition(1, "Math.sin(x)", "#29a0a4")
-  ]
+  fns: FunctionDefinition[] = []
   funcSymbol = "ƒ(x)"
   funcSymbols = ["ƒ(x)", "α(x)", "β(x)", "γ(x)", "ζ(x)", "ϑ(x)", "ϰ(x)", "φ(x)", " χ(x)", "ψ(x)", "ω(x)", "ϱ(x)"]
   nextId = 1
-  funcOperators = [
-    new PredefinedFunction(1, "<span>x<sup>m/n</sup></span>", "x**(m/n)", Compose.NONE),
-    new PredefinedFunction(2, "<span>log<sub>n</sub>x</span>", "Log(n,x)", Compose.NONE),
-    new PredefinedFunction(3, "<span><sup>2n</sup>&#8730;x<sup>m</sup></span>", "Root1(x, n, m)", Compose.NONE),
-    new PredefinedFunction(4, "<span><sup>2n+1</sup>&#8730;x<sup>m</sup></span>", "Root2(x, n, m)", Compose.NONE),
-    new PredefinedFunction(5, "<span>(&#925;)<sup>x</sup></span>", "EF(N, x)", Compose.NONE),
-    new PredefinedFunction(6, "<span>|x|</span>", "ABS(x)", Compose.NONE),
-    new PredefinedFunction(7, "<span>sign(x)</span>", "SIGN(x)", Compose.NONE),
-    new PredefinedFunction(8, "<span><sup>1</sup>/<sub>&#402;(x)</sub></span>", "1/ƒ(x)", Compose.DIRECT),
-    new PredefinedFunction(9, "<span>&#402;(<sup>1</sup>/<sub>x</sub>)</span>", "1/x", Compose.REVERSE)
-  ]
-  funcOperatorsTrigonometry = [
-      new PredefinedFunctionTrigonometry(1, "sin(x)", "sin(x)"),
-      new PredefinedFunctionTrigonometry(2, "cos(x)", "cos(x)"),
-      new PredefinedFunctionTrigonometry(3, "tg(x)", "tg(x)"),
-      new PredefinedFunctionTrigonometry(4, "ctg(x)", "ctg(x)"),
+  @Prop() funcOperators: Array<PredefinedFunction>
+  @Prop() funcOperatorsTrigonometry: Array<PredefinedFunctionTrigonometry>
 
-      new PredefinedFunctionTrigonometry(5, "arcsin(x)", "arcsin(x)"),
-      new PredefinedFunctionTrigonometry(6, "arccos(x)", "arccos(x)"),
-      new PredefinedFunctionTrigonometry(7, "arctg(x)", "arctg(x)"),
-      new PredefinedFunctionTrigonometry(8, "arcctg(x)", "arcctg(x)")
-  ]
+  isTrigFn(): boolean {
+    return this.funcOperatorsTrigonometry.length > 0
+  }
+
+  isNormalFn(): boolean {
+    return this.funcOperators.length > 0
+  }
 
   mounted(): void {
     this.vueCanvas = (document.getElementById("canvas") as any).getContext("2d");
@@ -381,10 +322,6 @@ export default class HelloWorld extends Vue {
 </script>
 
 <style>
-.PageName {
-  font-family: Luminari, fantasy;
-}
-
 .mainControls {
   width: 300px;
   height: 580px;
