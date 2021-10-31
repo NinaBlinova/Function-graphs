@@ -3,6 +3,8 @@
     <router-link to="/">Title</router-link>
     <h1 class = 'PageName'>{{ msg }}</h1>
     <Graph
+        :display-calculator = true
+        :display-pi = true
         :func-operators = funcOperators
         :func-operators-trigonometry = funcOperatorsTrigonometry>
     </Graph>

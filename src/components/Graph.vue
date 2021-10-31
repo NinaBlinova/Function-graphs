@@ -11,31 +11,30 @@
 
       <input v-model="functionName" id="fnName" class="EnteringValues1">
 
-      <label for="maxX" class="CharacteristicsOfTheText2">Max X =
-        <div id="v-model-checkbox1" class="PI">
+      <div id="v-model-checkbox1" class="PI" v-if="displayPi">
         <input type="checkbox" id="checkbox1" v-model="PIx" />
         <label for="checkbox1">{{ "×" + "\u03C0" }}</label>
 
-          <div id="v-model-checkbox3" class="ef">
+        <div id="v-model-checkbox3" class="ef">
           <input type="checkbox" id="checkbox3" v-model="ef" />
-            <label for="checkbox1">{{ "×" + "80" }}</label></div>
+          <label for="checkbox1">{{ "×" + "80" }}</label></div>
+      </div>
 
-      </div></label>
+      <div id="v-model-checkbox2" class="PI" v-if="displayPi">
+        <input type="checkbox" id="checkbox2" v-model="PIy" />
+        <label for="checkbox2">{{ "×" + "\u03C0" }}</label>
+      </div>
 
-
+      <label for="maxX" class="CharacteristicsOfTheText2">Max X =</label>
       <input v-model="maxX" id="maxX" type="number" class="EnteringValues2">
 
-      <label for="maxY" class="CharacteristicsOfTheText3">Max Y =
-        <div id="v-model-checkbox2" class="PI">
-          <input type="checkbox" id="checkbox2" v-model="PIy" />
-          <label for="checkbox2">{{ "×" + "\u03C0" }}</label>
-        </div></label>
+      <label for="maxY" class="CharacteristicsOfTheText3">Max Y =</label>
       <input v-model="maxY" id="maxY" type="number" class="EnteringValues3">
 
       <label for="functionColor" class = "CharacteristicsOfTheText4">Function Color:</label>
       <input v-model="functionColor" id="functionColor" type="color" class="EnteringValues4">
 
-      <div id="calculator">
+      <div id="calculator" v-if="displayCalculator">
         <div class="keys">
           <div v-for="predefinedFunction in funcOperators"
                v-html="predefinedFunction.display"
@@ -144,7 +143,7 @@ export default class HelloWorld extends Vue {
   vueCanvas!: any
   maxX = 4
   maxY = 4
-  functionName = "Math.tan(x)"
+  //functionName = "Math.tan(x)"
 
   selectedDisplayShapeText = ""
 
@@ -158,6 +157,9 @@ export default class HelloWorld extends Vue {
   nextId = 1
   @Prop() funcOperators: Array<PredefinedFunction>
   @Prop() funcOperatorsTrigonometry: Array<PredefinedFunctionTrigonometry>
+  @Prop() displayCalculator: boolean
+  @Prop() displayPi: boolean
+  @Prop() functionName: string
 
   isTrigFn(): boolean {
     return this.funcOperatorsTrigonometry.length > 0
@@ -438,9 +440,9 @@ export default class HelloWorld extends Vue {
 .Butt1 {
   font-family: cursive;
   float: right;
-  margin: 8% -4%; /* сверху | справа | снизу | слева */
-  position: absolute;
-  right: 10%;
+  /*margin: 8% -4%; !* сверху | справа | снизу | слева *!*/
+  /*position: absolute;*/
+  /*right: 10%;*/
   display:block;
   color: #244950;
   text-decoration: none;
@@ -457,9 +459,9 @@ export default class HelloWorld extends Vue {
 .Butt2 {
   font-family: cursive;
   float: right;
-  position: absolute;
-  margin: 8% -4%; /* сверху | справа | снизу | слева */
-  left: 10%;
+  /*position: absolute;*/
+  /*margin: 8% -4%; !* сверху | справа | снизу | слева *!*/
+  /*left: 10%;*/
   display:block;
   color: #244950;
   text-decoration: none;
