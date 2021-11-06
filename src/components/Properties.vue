@@ -5,7 +5,7 @@
     <div class="Charact">
       <div class="TH"> <router-link to="/linearFunction"><img class = "Jpg1" src="../assets/1.jpg"/></router-link></div>
       <div class="TH"><router-link to="/quadraticFunction"><img class = "Jpg2" src="../assets/2.jpg"/></router-link></div>
-      <div class="TH"><img class = "Jpg3" src="../assets/3.jpg"/></div>
+      <div class="TH"><router-link to="/hyperbola"><img class = "Jpg3" src="../assets/3.jpg"/></router-link></div>
       <div class="TH"><img class = "Jpg4" src="../assets/4.jpg"/></div>
     </div>
   </div>

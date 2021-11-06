@@ -11,7 +11,13 @@
 
       <input v-model="functionName" id="fnName" class="EnteringValues1">
 
-      <div id="v-model-checkbox1" class="PI" v-if="displayPi">
+      <label for="maxX" class="CharacteristicsOfTheText2">Max X =</label>
+      <input v-model="maxX" id="maxX" type="number" class="EnteringValues2">
+
+      <label for="maxY" class="CharacteristicsOfTheText3">Max Y =</label>
+      <input v-model="maxY" id="maxY" type="number" class="EnteringValues3">
+
+      <div id="v-model-checkbox1" class="PIx" v-if="displayPi">
         <input type="checkbox" id="checkbox1" v-model="PIx" />
         <label for="checkbox1">{{ "×" + "\u03C0" }}</label>
 
@@ -20,19 +26,16 @@
           <label for="checkbox1">{{ "×" + "80" }}</label></div>
       </div>
 
-      <div id="v-model-checkbox2" class="PI" v-if="displayPi">
+      <div id="v-model-checkbox2" class="PIy" v-if="displayPi">
         <input type="checkbox" id="checkbox2" v-model="PIy" />
         <label for="checkbox2">{{ "×" + "\u03C0" }}</label>
       </div>
 
-      <label for="maxX" class="CharacteristicsOfTheText2">Max X =</label>
-      <input v-model="maxX" id="maxX" type="number" class="EnteringValues2">
-
-      <label for="maxY" class="CharacteristicsOfTheText3">Max Y =</label>
-      <input v-model="maxY" id="maxY" type="number" class="EnteringValues3">
-
       <label for="functionColor" class = "CharacteristicsOfTheText4">Function Color:</label>
       <input v-model="functionColor" id="functionColor" type="color" class="EnteringValues4">
+
+      <button v-on:click="addFunction" class="Butt2">Add Function</button>
+      <button v-on:click="drawRect" class="Butt1">Draw functions</button>
 
       <div id="calculator" v-if="displayCalculator">
         <div class="keys">
@@ -57,8 +60,7 @@
       </div>
 
 
-      <button v-on:click="addFunction" class="Butt2">Add Function</button>
-      <button v-on:click="drawRect" class="Butt1">Draw functions</button>
+
     </div>
 
     <canvas id="canvas" width="600" height="600" class="mainCanvas"></canvas>
@@ -138,10 +140,12 @@ function PI () {
   return Math.PI
 }
 
+
+
 @Component
 export default class HelloWorld extends Vue {
   vueCanvas!: any
-  maxX = 4
+  maxX = 5
   maxY = 4
   //functionName = "Math.tan(x)"
 
@@ -341,6 +345,7 @@ export default class HelloWorld extends Vue {
   height: 600px;
   background-color: #89c7d2;
   border-radius: 2px;
+  margin-top: -15px;
   border: 4px double #364a52;
   float: right;
   display: inline;
@@ -357,23 +362,29 @@ export default class HelloWorld extends Vue {
   letter-spacing: 2px;
 }
 .CharacteristicsOfTheText2{
-  margin: 24% 2%;
+   /* margin: 17% 2%; сверху | справа | снизу | слева */
+  margin-top: 17%;
+  margin-left: 2%;
   position: absolute;
   display: table-caption;
   font-size: 17px;
   letter-spacing: 2px;
+  float: left;
 }
 .CharacteristicsOfTheText3{
   width: 80px;
-  margin: 24% 52%;
+  margin-top: 17%;
+  margin-left: 52%;
   position: absolute;
   display: table-caption;
   font-size: 17px;
   letter-spacing: 2px;
+  float: left;
 }
 
 .CharacteristicsOfTheText4{
-  margin: 48% 2%;
+  margin-top: 40%;
+  margin-left: 2%;
   position: absolute;
   display: table-caption;
   font-size: 17px;
@@ -394,9 +405,12 @@ export default class HelloWorld extends Vue {
 
 .EnteringValues2 {
   width: 50px;
-  margin: 4% 52%;
-  float: right;
+  left: 30%;
+  top: 9%;
+  float: left;
   border-radius: 40px;
+  position: relative;
+  vertical-align: top;
 }
 .EnteringValues2:hover {
   -webkit-box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
@@ -406,9 +420,11 @@ export default class HelloWorld extends Vue {
 
 .EnteringValues3 {
   width: 50px;
-  margin: -11% 2%;
-  float: right;
+  top: 5.5%;
+  left: 80%;
+  float: left;
   border-radius: 40px;
+  position: relative;
 }
 .EnteringValues3:hover {
   -webkit-box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
@@ -417,9 +433,12 @@ export default class HelloWorld extends Vue {
 }
 
 .EnteringValues4 {
+  position: absolute;
+  display: table-caption;
   width: 120px;
   height: 20px;
-  margin: 13% 2%;
+  margin-top: 40%;
+  margin-left: 60%;/* сверху | справа | снизу | слева */
   float: right;
   border-radius: 40px;
 }
@@ -438,12 +457,16 @@ export default class HelloWorld extends Vue {
 
 
 .Butt1 {
+  position: absolute;
+  display: table-caption;
   font-family: cursive;
-  float: right;
+  float: left;
+  vertical-align: top;
   /*margin: 8% -4%; !* сверху | справа | снизу | слева *!*/
   /*position: absolute;*/
   /*right: 10%;*/
-  display:block;
+  margin-top: 180%;
+  margin-left: 60%;
   color: #244950;
   text-decoration: none;
   border-color: #7eb2b4;
@@ -457,12 +480,14 @@ export default class HelloWorld extends Vue {
 }
 
 .Butt2 {
+  position: absolute;
+  display: table-caption;
   font-family: cursive;
-  float: right;
+  float: left;
   /*position: absolute;*/
   /*margin: 8% -4%; !* сверху | справа | снизу | слева *!*/
   /*left: 10%;*/
-  display:block;
+  margin-top: 180%;
   color: #244950;
   text-decoration: none;
   border-color: #7eb2b4;
@@ -487,14 +512,26 @@ export default class HelloWorld extends Vue {
   box-shadow: inset 0 0 0 23px #6cd0d4;
 }
 
-.PI {
+.PIx {
   font-family: cursive;
   font-size: 20px;
   width: 50px;
   height: 30px;
   border-radius: 2px;
   border: 4px double #459295;
-  margin: 5% 2%;
+  float: left;
+  margin: 37px 2px;  /*сверху | справа | снизу | слева *!*/
+}
+
+.PIy {
+  font-family: cursive;
+  font-size: 20px;
+  width: 50px;
+  height: 30px;
+  border-radius: 2px;
+  border: 4px double #459295;
+  float: left;
+  margin: 16px 90px;  /*сверху | справа | снизу | слева *!*/
 }
 
 .ef {
@@ -531,7 +568,7 @@ export default class HelloWorld extends Vue {
 
 #calculator {
   width: 290px;
-  height: 313px;
+  height: 263px;
   margin-top: 188px;
   margin-left: auto;
   margin-right: auto;

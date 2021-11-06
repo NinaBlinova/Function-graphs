@@ -6,6 +6,7 @@ import Title from './components/Title.vue';
 import Properties from './components/Properties.vue';
 import LinearFunction from './components/LinearFunction.vue';
 import QuadraticFunction from './components/QuadraticFunction.vue';
+import Hyperbola from './components/Hyperbola.vue';
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -16,7 +17,8 @@ const router = new VueRouter({
     {path: '/', component: Title},
     {path: '/properties', component: Properties},
     {path: '/linearFunction', component: LinearFunction},
-    {path: '/quadraticFunction', component: QuadraticFunction}
+    {path: '/quadraticFunction', component: QuadraticFunction},
+    {path: '/hyperbola', component: Hyperbola}
   ]
 })
 

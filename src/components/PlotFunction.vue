@@ -9,6 +9,9 @@
         :func-operators-trigonometry = funcOperatorsTrigonometry>
     </Graph>
   </div>
+
+
+
 </template>
 
 <script>
@@ -52,4 +55,6 @@ export default {
   .PageName {
     font-family: Luminari, fantasy;
   }
+
+
 </style>
