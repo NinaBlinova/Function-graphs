@@ -2,39 +2,41 @@
   <div>
     <router-link to="/properties">Back</router-link>
     <div>
-      <div class="rectangle"><span>y = </span><input v-model="a" class="a"><span> * x^2 +</span><input v-model="b"
-                                                                                                       class="b"><span> * x +
-       </span><input v-model="c" class="с">
+      <div class="rectangleQ"><span>y = </span><input v-model="a" class="aQ"><span> &#xD7; x<sup>2</sup> +</span><input v-model="b" class="bQ">
+        <span> &#xD7; x +</span><input v-model="c" class="сQ">
       </div>
       <Graph
-          :function-name=functionName
+          :function-name=functionName()
           :display-calculator=false
           :display-pi=false
           :func-operators=funcOperators
           :func-operators-trigonometry=funcOperatorsTrigonometry>
       </Graph>
+      <table class="TableQ">
+        <tr>
+          <th> <div class="PropertiesOfAQuadraticFunction">
+            <h1>Linear function properties</h1>
+            <ol class="Quadratic">
+              <li>D(f) &#8712; R</li>
+              <li> E(f): {{ ef() }}</li>
+              <li>При а > 0 наименьшим значением параболы является её вершина, а наибольшего не существует.
+                При а &#60; 0 наибольшим значением параболы является вершина, а наименьшего не существует.</li>
+              <li>Функция непериодическая.</li>
+              <li>Вершина параболы находится по формуле: (<sup>-b</sup>/<sub>2*a</sub>; c -
+                (<sup>b<sup>2</sup></sup>/<sub>4*a</sub>)).</li>
+              <li>Промежутки монотонности: {{intervalsOfMonotonyMinusInfinity()}}, {{intervalsOfMonotonyPlusInfinity()}}</li>
+            </ol>
+          </div></th>
+          <th>      <div class="ConstructionOfAQuadraticFunction">
+            <h1>Construction of a quadratic function</h1>
+            <ol class="construction">
+              <li>Вершина параболы: ({{x()}}; {{y()}}).</li>
+              <li>Нули функции: x<sub>1</sub> = {{ FunctionZerosQM() }}, x<sub>2</sub> = {{ FunctionZerosQP() }}.</li>
+            </ol>
+          </div></th>
+        </tr>
 
-      <div class="PropertiesOfAQuadraticFunction">
-        <h1>Linear function properties</h1>
-        <ol class="ball">
-          <li><a href="#">D(f) &#8712; R</a></li>
-          <li><a href="#">При а > 0 наименьшим значением параболы является её вершина, а наибольшего не существует.
-            При а &#60; 0 наибольшим значением параболы является вершина, а наименьшего не существует.</a></li>
-          <li><a href="#">Функция непериодическая.</a></li>
-          <li><a href="#">Вершина параболы находится по формуле: (<sup>-b</sup>/<sub>2*a</sub>; c -
-            (<sup>b^2</sup>/<sub>4*a</sub>)).</a></li>
-        </ol>
-      </div>
-
-      <div class="ConstructionOfAQuadraticFunction">
-        <h1>Construction of a quadratic function</h1>
-        <ol>
-          <li>Вершина параболы: (<sup>-{{ b }}</sup>/<sub>2*{{ a }}</sub>; {{ c }} -
-            (<sup>{{ b }}^2</sup>/<sub>4*{{ a }}</sub>)).
-          </li>
-          <li> E(f): {{ ef() }}</li>
-        </ol>
-      </div>
+      </table>
 
     </div>
   </div>
@@ -52,7 +54,7 @@ import Component from "vue-class-component";
     Graph
   }
 })
-export default class LinearFunction extends Vue {
+export default class QuadraticFunction extends Vue {
   funcOperators: Array<PredefinedFunction> = [
     new PredefinedFunction(1, "<span>x</span>", "x", Compose.NONE)
   ]
@@ -64,7 +66,7 @@ export default class LinearFunction extends Vue {
   c = 0
 
   functionName(): string {
-    return "" + this.a + "*x**2+" + this.b + "*x+" + this.c;
+    return  this.a + "*x**2+" + this.b + "*x+" + this.c;
   }
 
   x(): number {
@@ -83,36 +85,61 @@ export default class LinearFunction extends Vue {
     }
   }
 
-  intervalsOfMonotony(): string {
+  intervalsOfMonotonyMinusInfinity(): string {
     if (this.a > 0) {
-      return "(" + "-∞" + ";" + this.x() + "]"
+      return "Убывает:" + "(" + "-∞" + ";" + this.x() + "]"
     } else {
-      return "(" + "-∞" + ";" + this.x() + "]"
+      return "Возрастает:" +"(" + "-∞" + ";" + this.x() + "]"
     }
   }
+
+  intervalsOfMonotonyPlusInfinity(): string {
+    if (this.a > 0) {
+      return "Возрастает:" + "[" + this.x() + ";" + "+∞"  + ")"
+    } else {
+      return "Убывает:" + "[" + this.x() + ";" + "+∞"  + ")"
+    }
+  }
+  FunctionZerosQP(){
+    if((this.y() <= 0 && this.a > 0) || (this.a < 0 && this.y() >= 0)){
+      return (-this.b + Math.sqrt(this.b**2 - 4 * this.a * this.c))/2*this.a
+    }
+    else{
+      return "X"
+    }
+  }
+  FunctionZerosQM(){
+    if((this.y() <= 0 && this.a > 0) || (this.a < 0 && this.y() >= 0)){
+      return (-this.b - Math.sqrt(this.b**2 - 4 * this.a * this.c))/2*this.a
+    }
+    else{
+      return "X"
+    }
+  }
+
 }
 
 </script>
 <style>
-.a {
+.aQ {
   color: black;
   height: 30px;
   width: 30px;
 }
 
-.b {
+.bQ {
   color: black;
   height: 30px;
   width: 30px;
 }
 
-.с {
+.сQ {
   color: black;
   height: 30px;
   width: 30px;
 }
 
-.rectangle {
+.rectangleQ {
   margin-left: auto;
   margin-right: auto;
   width: 260px;
@@ -125,7 +152,7 @@ export default class LinearFunction extends Vue {
   align-items: center;
 }
 
-.rectangle:hover {
+.rectangleQ:hover {
   -webkit-box-shadow: 0px 0px 20px rgba(21, 21, 87, 0.8);
   -moz-box-shadow: 0px 0px 20px rgba(21, 21, 87, 0.8);
   box-shadow: 0px 0px 20px rgba(21, 21, 87, 0.8);
@@ -165,17 +192,13 @@ export default class LinearFunction extends Vue {
 }
 
 
-.ball {
+.Quadratic {
   margin-top: 20px;
   list-style: none;
   width: 700px;
-}
-
-.ball a {
-  font-family: 'Merriweather', serif;
+  font-family: cursive;
   text-align: justify;
-  width: 100%;
-  color: #808285;
+  color: #364a52;
   text-decoration: none;
   display: inline-block;
   padding-left: 25px;
@@ -186,27 +209,17 @@ export default class LinearFunction extends Vue {
   transition: .3s linear;
 }
 
-.ball a:before {
-  content: "";
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #425273;
-  position: absolute;
-  left: -30px;
-  top: 7px;
-}
 
-.ball li {
+.Quadratic li {
   position: relative;
 }
 
-.ball li:before {
+.Quadratic li:before {
   content: "";
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #89c7d2;
+  background: #1c4b5c;
   position: absolute;
   top: 12px;
   left: -30px;
@@ -214,7 +227,7 @@ export default class LinearFunction extends Vue {
   transition: .4s ease-in-out;
 }
 
-.ball li:hover:before {
+.Quadratic li:hover:before {
   left: -20px;
 }
 
@@ -224,8 +237,7 @@ export default class LinearFunction extends Vue {
   width: 800px;
   height: 100px;
   border: 4px double #364a52;
-  margin-left: 1080px;
-  margin-top: -112px;
+
 }
 
 .ConstructionOfAQuadraticFunction h1 {
@@ -251,5 +263,45 @@ export default class LinearFunction extends Vue {
   left: -28px;
   border: 4px solid #364a52;
   box-sizing: border-box;
+}
+.construction {
+  list-style: none;
+  margin-top: 20px;
+  font-family: cursive;
+  text-align: justify;
+  width: 100%;
+  color: #364a52;
+  text-decoration: none;
+  display: inline-block;
+  padding-left: 25px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 20px;
+  position: relative;
+  transition: .3s linear;
+}
+.construction li {
+  position: relative;
+}
+
+.construction li:before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1c4b5c;
+  position: absolute;
+  top: 12px;
+  left: -30px;
+  z-index: 2;
+  transition: .4s ease-in-out;
+}
+
+.construction li:hover:before {
+  left: -20px;
+}
+.TableQ{
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

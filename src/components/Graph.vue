@@ -145,7 +145,7 @@ function PI () {
 @Component
 export default class HelloWorld extends Vue {
   vueCanvas!: any
-  maxX = 5
+  maxX = 4
   maxY = 4
   //functionName = "Math.tan(x)"
 
@@ -330,11 +330,11 @@ export default class HelloWorld extends Vue {
 <style>
 .mainControls {
   width: 300px;
+  display: inline;
   height: 580px;
   background-color: #89c7d2;
   border-radius: 2px;
   float: left;
-  display: inline;
   position: relative;
   text-align: left;
   font-family: cursive;
@@ -349,6 +349,7 @@ export default class HelloWorld extends Vue {
   border: 4px double #364a52;
   float: right;
   display: inline;
+  margin-right: 10px;
   position: relative;
   text-align: left;
   font-family: cursive;

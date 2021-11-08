@@ -3,84 +3,95 @@
     <router-link to="/properties">Back</router-link>
     <div>
 
-      <div class="rectangle"><span>y = </span><input v-model="a" class="a"><span>* x + </span><input v-model="b" class="b">
+      <div class="rectangleL"><span>y = </span><input v-model="a" class="aL"><span>&#xD7; x + </span><input v-model="b" class="bL">
       </div>
 
       <Graph
-          :function-name = functionName
+          :function-name = functionName()
           :display-calculator = false
           :display-pi = false
           :func-operators = funcOperators
           :func-operators-trigonometry = funcOperatorsTrigonometry>
       </Graph>
+      <table class="TableL">
+        <tr>
+          <th>      <div class = "LinearFunctionProperties">
+            <h1>Linear function properties</h1>
+            <ol class="ball">
+              <li>D(f) &#8712; R</li>
+              <li>E(f) &#8712; R</li>
+              <li>График линейной функции — прямая.
+                Для построения прямой достаточно знать две точки. Положение прямой на координатной плоскости зависит от значений коэффициентов k и b.</li>
+              <li>Функция не имеет ни наибольшего, ни наименьшего значений.</li>
+              <li>Свойством периодичности линейная функция не обладает, потому что данная функция является непрерывной.</li>
+              <li>Функция монотонно возрастает на области определения при k > 0 и монотонно убывает при k &#60; 0.</li>
+            </ol>
+          </div> </th>
+          <th> <div class = "LinearFunctionConstruction">
+            <h1>Linear function construction</h1>
+            <ol class="ball1">
+              <li>Все ординаты умножаются на  <span>{{a}}</span>.</li>
+              <li>График сдвигается на <span>{{b}}</span> вдоль оси OY.</li>
+              <li>Нули функции: x = {{FunctionZerosL()}}.</li>
+            </ol>
+          </div> </th>
+        </tr>
 
-      <div class = "LinearFunctionProperties">
-        <h1>Linear function properties</h1>
-        <ol class="ball">
-          <li><a href="#">D(f) &#8712; R</a></li>
-          <li><a href="#">E(f) &#8712; R</a></li>
-          <li><a href="#">График линейной функции — прямая.
-            Для построения прямой достаточно знать две точки. Положение прямой на координатной плоскости зависит от значений коэффициентов k и b.</a></li>
-          <li><a href="#">Функция не имеет ни наибольшего, ни наименьшего значений.</a></li>
-          <li><a href="#">Свойством периодичности линейная функция не обладает, потому что данная функция является непрерывной.</a></li>
-          <li><a href="#">Функция монотонно возрастает на области определения при k > 0 и монотонно убывает при k &#60; 0.</a></li>
-        </ol>
-      </div>
-
-      <div class = "LinearFunctionConstruction">
-        <h1>Linear function construction</h1>
-        <ol class="ball1">
-          <li><a href="#">Все ординаты умножаются на  <span>{{a}}</span>.</a></li>
-          <li><a href="#">График сдвигается на <span>{{b}}</span> единиц вдоль оси OY.</a></li>
-        </ol>
-      </div>
+      </table>
 
 
     </div>
   </div>
 </template>
 
-<script>
-import {Compose, PredefinedFunction} from "@/function";
-import Graph from "@/components/Graph";
+<script lang="ts">
+import {Compose, PredefinedFunction, PredefinedFunctionTrigonometry} from "@/function";
+import Graph from "@/components/Graph.vue";
+import Vue from "vue";
+import Component from "vue-class-component";
 
-export default {
-  name: "LinearFunction",
-  data() {
-    return {
-      funcOperators: [
-        new PredefinedFunction(1, "<span>x</span>", "x", Compose.NONE)
-      ],
-      funcOperatorsTrigonometry: [],
-      a: 1,
-      b: 0
-    }
-  },
-  computed: {
-    functionName() {
-      return "" + this.a + " * x + " + this.b;
-    }
-  },
-  components: {Graph}
+
+@Component({
+  components: {
+    Graph
+  }
+})
+export default class QuadraticFunction extends Vue {
+  funcOperators: Array<PredefinedFunction> = [
+    new PredefinedFunction(1, "<span>x</span>", "x", Compose.NONE)
+  ]
+
+  funcOperatorsTrigonometry: Array<PredefinedFunctionTrigonometry> = []
+
+  a = 1
+  b = 0
+
+
+  functionName(): string {
+    return  this.a + "*x+" + this.b;
+  }
+  FunctionZerosL(){
+    return (-this.b/this.a).toFixed(2)
+  }
+
 }
-
 </script>
 
 
 <style>
-.a{
+.aL{
   color: black;
   height: 30px;
   width: 30px;
 }
 
-.b{
+.bL{
   color: black;
   height: 30px;
   width: 30px;
 }
 
-.rectangle {
+.rectangleL {
   margin-left: auto;
   margin-right: auto;
   width: 220px;
@@ -93,7 +104,7 @@ export default {
   align-items: center;
 }
 
-.rectangle:hover {
+.rectangleL:hover {
   -webkit-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
   -moz-box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
   box-shadow: 0px 0px 20px rgba(21,21,87,0.8);
@@ -137,12 +148,9 @@ export default {
   margin-top: 20px;
   list-style: none;
   width: 700px;
-}
-.ball a {
-  font-family: 'Merriweather', serif;
+  font-family: cursive;
   text-align: justify;
-  width: 100%;
-  color: #808285;
+  color: #364a52;
   text-decoration: none;
   display: inline-block;
   padding-left: 25px;
@@ -152,23 +160,14 @@ export default {
   position: relative;
   transition: .3s linear;
 }
-.ball a:before {
-  content: "";
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #425273;
-  position: absolute;
-  left: -30px;
-  top: 7px;
-}
+
 .ball li {position: relative;}
 .ball li:before {
   content: "";
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #89c7d2;
+  background: #1c4b5c;
   position: absolute;
   top: 12px;
   left: -30px;
@@ -179,12 +178,13 @@ export default {
 
 .LinearFunctionConstruction{
   background: #89c7d2;
+  float: right;
+  display: inline;
   text-align: center;
   width: 800px;
   height: 100px;
   border: 4px double #364a52;
-  margin-left: 1080px;
-  margin-top: -112px;
+  margin-left: 56.8%;
 }
 
 .LinearFunctionConstruction h1 {
@@ -218,13 +218,9 @@ export default {
   list-style: none;
   width: 700px;
   margin-left: 5%;
-}
-
-.ball1 a {
-  font-family: 'Merriweather', serif;
+  font-family: cursive;
   text-align: justify;
-  width: 100%;
-  color: #808285;
+  color: #364a52;
   text-decoration: none;
   display: inline-block;
   padding-left: 25px;
@@ -234,23 +230,14 @@ export default {
   position: relative;
   transition: .3s linear;
 }
-.ball1 a:before {
-  content: "";
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #425273;
-  position: absolute;
-  left: -30px;
-  top: 7px;
-}
+
 .ball1 li {position: relative;}
 .ball1 li:before {
   content: "";
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #89c7d2;
+  background: #1c4b5c;
   position: absolute;
   top: 12px;
   left: -30px;
@@ -258,5 +245,9 @@ export default {
   transition: .4s ease-in-out;
 }
 .ball1 li:hover:before {left: -20px;}
+.TableL{
+  margin-left: auto;
+  margin-right: auto;
+}
 
 </style>
