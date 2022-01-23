@@ -98,7 +98,7 @@ export class Context {
         const aY = (this.height - 2 * this.marginY) / (2 * this.maxY);
         return height * aY;
     }
-    
+
     public convertY(y: number): number {
         const bY = this.height / 2;
         return -this.convertHeight(y) + bY

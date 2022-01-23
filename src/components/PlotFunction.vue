@@ -30,9 +30,9 @@ export default {
         new PredefinedFunction(4, "<span><sup>2n+1</sup>&#8730;x<sup>m</sup></span>", "Root2(x, n, m)", Compose.NONE),
         new PredefinedFunction(5, "<span>(&#925;)<sup>x</sup></span>", "EF(N, x)", Compose.NONE),
         new PredefinedFunction(6, "<span>|x|</span>", "ABS(x)", Compose.NONE),
-        new PredefinedFunction(7, "<span>sign(x)</span>", "SIGN(x)", Compose.NONE),
-        new PredefinedFunction(8, "<span><sup>1</sup>/<sub>&#402;(x)</sub></span>", "1/ƒ(x)", Compose.DIRECT),
-        new PredefinedFunction(9, "<span>&#402;(<sup>1</sup>/<sub>x</sub>)</span>", "1/x", Compose.REVERSE)
+
+        new PredefinedFunction(7, "<span><sup>1</sup>/<sub>&#402;(x)</sub></span>", "1/ƒ(x)", Compose.DIRECT),
+        new PredefinedFunction(8, "<span>&#402;(<sup>1</sup>/<sub>x</sub>)</span>", "1/x", Compose.REVERSE)
       ],
       funcOperatorsTrigonometry: [
         new PredefinedFunctionTrigonometry(1, "sin(x)", "sin(x)"),

@@ -159,11 +159,11 @@ export default class HelloWorld extends Vue {
   funcSymbol = "ƒ(x)"
   funcSymbols = ["ƒ(x)", "α(x)", "β(x)", "γ(x)", "ζ(x)", "ϑ(x)", "ϰ(x)", "φ(x)", " χ(x)", "ψ(x)", "ω(x)", "ϱ(x)"]
   nextId = 1
-  @Prop() funcOperators: Array<PredefinedFunction>
-  @Prop() funcOperatorsTrigonometry: Array<PredefinedFunctionTrigonometry>
-  @Prop() displayCalculator: boolean
-  @Prop() displayPi: boolean
-  @Prop() functionName: string
+  @Prop() funcOperators!: Array<PredefinedFunction>
+  @Prop() funcOperatorsTrigonometry!: Array<PredefinedFunctionTrigonometry>
+  @Prop() displayCalculator!: boolean
+  @Prop() displayPi!: boolean
+  @Prop() functionName!: string
 
   isTrigFn(): boolean {
     return this.funcOperatorsTrigonometry.length > 0
