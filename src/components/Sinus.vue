@@ -14,7 +14,7 @@
       <table class="TableL">
         <tr>
           <th>      <div class="PropertiesSinus">
-            <h1>Linear function properties</h1>
+            <h1>Function properties</h1>
             <ol class="Sin1">
               <li>D(f) &#8712; R</li>
               <li> E(f): {{efSin()}}</li>
@@ -25,7 +25,7 @@
             </ol>
           </div> </th>
           <th>      <div class="ConstructionSinus">
-            <h1>Construction of a quadratic function</h1>
+            <h1>Construction of a sinusoid</h1>
             <ol class="Sin2">
               <li>{{coefficientD()}}</li>
               <li>Все ординаты умножаются на  {{a}}</li>

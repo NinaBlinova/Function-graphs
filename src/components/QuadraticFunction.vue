@@ -15,7 +15,7 @@
       <table class="TableQ">
         <tr>
           <th> <div class="PropertiesOfAQuadraticFunction">
-            <h1>Linear function properties</h1>
+            <h1>Function properties</h1>
             <ol class="Quadratic">
               <li>D(f) &#8712; R</li>
               <li> E(f): {{ ef() }}</li>
@@ -101,20 +101,11 @@ export default class QuadraticFunction extends Vue {
     }
   }
   FunctionZerosQP(){
-    if((this.y() <= 0 && this.a > 0) || (this.a < 0 && this.y() >= 0)){
-      return (-this.b + Math.sqrt(this.b**2 - 4 * this.a * this.c))/2*this.a
+      return (-this.b + (this.b**2 - 4 * this.a * this.c)**0.5)/(2*this.a)
     }
-    else{
-      return "X"
-    }
-  }
+
   FunctionZerosQM(){
-    if((this.y() <= 0 && this.a > 0) || (this.a < 0 && this.y() >= 0)){
-      return (-this.b - Math.sqrt(this.b**2 - 4 * this.a * this.c))/2*this.a
-    }
-    else{
-      return "X"
-    }
+      return (-this.b - (this.b**2 - 4 * this.a * this.c)**0.5)/(2*this.a)
   }
 
 }

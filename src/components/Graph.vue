@@ -296,7 +296,7 @@ export default class HelloWorld extends Vue {
       }
     })
 
-    //название осей
+    //подписи к осям
 
     ctx.beginPath();
     ctx.setLineWidth(1);

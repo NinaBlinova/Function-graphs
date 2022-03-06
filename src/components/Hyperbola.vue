@@ -15,7 +15,7 @@
       <table class="TableH">
         <tr>
           <th>      <div class="PropertiesHyperbola">
-            <h1>Linear function properties</h1>
+            <h1>Function properties</h1>
             <ol class="Hyperbola1">
               <li>D(F): {{dfMinusInfinity()}} &#965; {{dfPlusInfinity()}}</li>
               <li> E(f): {{ efMinusInfinity() }} &#965; {{ efPlusInfinity() }}</li>
@@ -26,7 +26,7 @@
             </ol>
           </div> </th>
           <th>      <div class="ConstructionHyperbola">
-            <h1>Construction of a quadratic function</h1>
+            <h1>Construction of a hyperbola</h1>
             <ol class="Hyperbola2">
               <li>Асимптоты: y = {{AsymptotesB()}}, x = {{AsymptotesA()}}</li>
             </ol>

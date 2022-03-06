@@ -16,7 +16,7 @@
       <table class="TableL">
         <tr>
           <th>      <div class = "LinearFunctionProperties">
-            <h1>Linear function properties</h1>
+            <h1>Function properties</h1>
             <ol class="ball">
               <li>D(f) &#8712; R</li>
               <li>E(f) &#8712; R</li>

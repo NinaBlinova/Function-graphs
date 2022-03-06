@@ -46,10 +46,11 @@ export class Context {
     private rectInternal(x: number, y: number, width: number, height: number): void {
         this.canvas.rect(x, y, width, height)
     }
+    //прямоугольник
 
     public clearRect(): void {
         this.canvas.clearRect(0, 0, this.width, this.height)
-    }
+    } //очищает заданную область пикселей внутри данного прямоугольника
 
     private moveToInternal(x: number, y: number) {
         this.canvas.moveTo(x, y)
@@ -61,7 +62,7 @@ export class Context {
 
     public beginPath() {
         this.canvas.beginPath();
-    }
+    }// начало движения
 
     public stroke() {
         console.info("Stroke")
@@ -70,7 +71,7 @@ export class Context {
 
     private fillTextInternal(text: string, x: number, y: number) {
         this.canvas.fillText(text, x, y)
-    }
+    }//подписи к осям координат
 
     public setLineWidth(width: number): void {
         this.canvas.lineWidth = width

@@ -23,7 +23,7 @@ const router = new VueRouter({
     {path: '/sin', component: Sinus}
   ]
 })
-
+//навигация
 new Vue({
   render: h => h(App),
   router: router
