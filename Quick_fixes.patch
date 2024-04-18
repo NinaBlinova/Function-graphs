@@ -1,0 +1,49 @@
+Index: src/components/Graph.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/Graph.vue b/src/components/Graph.vue
+--- a/src/components/Graph.vue	(revision 0f1e8b2f7aafa02ef685a4b4f1ef63fa887891eb)
++++ b/src/components/Graph.vue	(date 1636404586258)
+@@ -159,11 +159,11 @@
+   funcSymbol = "ƒ(x)"
+   funcSymbols = ["ƒ(x)", "α(x)", "β(x)", "γ(x)", "ζ(x)", "ϑ(x)", "ϰ(x)", "φ(x)", " χ(x)", "ψ(x)", "ω(x)", "ϱ(x)"]
+   nextId = 1
+-  @Prop() funcOperators: Array<PredefinedFunction>
+-  @Prop() funcOperatorsTrigonometry: Array<PredefinedFunctionTrigonometry>
+-  @Prop() displayCalculator: boolean
+-  @Prop() displayPi: boolean
+-  @Prop() functionName: string
++  @Prop() funcOperators: Array<PredefinedFunction> = []
++  @Prop() funcOperatorsTrigonometry: Array<PredefinedFunctionTrigonometry> = []
++  @Prop() displayCalculator = true
++  @Prop() displayPi = true
++  @Prop() functionName = "x"
+ 
+   isTrigFn(): boolean {
+     return this.funcOperatorsTrigonometry.length > 0
+Index: src/components/Properties.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/Properties.vue b/src/components/Properties.vue
+--- a/src/components/Properties.vue	(revision 0f1e8b2f7aafa02ef685a4b4f1ef63fa887891eb)
++++ b/src/components/Properties.vue	(date 1636404779036)
+@@ -11,8 +11,14 @@
+   </div>
+ </template>
+ 
+-<script>
++<script lang="ts">
++import Vue from "vue";
++import Component from "vue-class-component";
+ 
++@Component
++export default class Properties extends Vue {
++
++}
+ </script>
+ 
+ <style>

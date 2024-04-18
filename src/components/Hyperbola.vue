@@ -70,10 +70,16 @@ export default class QuadraticFunction extends Vue {
     if (this.b != 0) {
       return this.b
     }
+    else {
+      return 0
+    }
   }
   coefficientA(){
     if (this.a != 0) {
       return -this.a
+    }
+    else {
+      return 0
     }
   }
 
@@ -133,10 +139,16 @@ export default class QuadraticFunction extends Vue {
     if(this.a != 0) {
       return -this.a
     }
+    else {
+      return 0
+    }
   }
   AsymptotesB() {
     if(this.b != 0) {
       return this.b
+    }
+    else {
+      return 0
     }
   }
 
